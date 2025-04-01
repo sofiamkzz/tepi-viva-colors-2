@@ -8,7 +8,6 @@ Este projeto, parte da disciplina de Tópicos Especiais e Projeto Integrador, vi
 
 Implementadas:
 - **Cadastro e Login de Usuário:** Cadastro e login por e-mail e senha.
-- **Carrinho de Compras:** Adição, visualização e gerenciamento de itens. Além do cálculo do valor total da compra.
 - **Gerenciamento de Conta do Usuário:** Atualização de informações pessoais.
 
 ## Referências
