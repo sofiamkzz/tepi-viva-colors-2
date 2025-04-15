@@ -7,9 +7,18 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.8.4",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^2.2.0",
+    "bootstrap": "^5.3.5",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.0",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^7.5.0",
     "react-scripts": "5.0.1",
+    "sequelize": "^6.37.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -1,0 +1,97 @@
+.account-panel {
+    border-radius: 15px;
+    border: 1px solid #ddd;
+    padding: 30px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+:root {
+    --main-color: #d42249;
+    /* Cor vibrante e sofisticada */
+    --accent-color: #ffccf9;
+    --secondary-color: #6a0572;
+    /* Roxo sofisticado */
+    --light-color: #fff4f9;
+    --footer-background: #f8d7da;
+    --footer-text: #d6336c;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background-color: var(--light-color);
+    font-family: 'Poppins', sans-serif;
+    color: var(--secondary-color);
+    display: flex;
+    flex-direction: column;
+
+}
+
+img{
+    border-radius: 25px;
+}
+
+.account-panel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.account-icon {
+    color: #d6336c;
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.edit-btn {
+    color: white;
+    background-color: #d6336c;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #c82333;
+}
+
+.navbar {
+    background: #d42249;
+    background: linear-gradient(90deg, #e70a3a8f 20%, rgba(255, 255, 255, 0) 78%, rgba(209, 11, 54, 0.564) 100%);
+}
+
+.navbar-brand{
+    color:  #ffffff !important;
+    font-weight: bold;
+}
+
+
+
+h1 {
+    color: var(--main-color);
+    /* Nova cor vibrante para o título */
+    font-weight: bold;
+}
+
+.user-info-panel {
+    background-color: #f0dadf8f;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.container {
+    flex: 1;
+}
+
+footer { 
+    background: #d42249;
+    background: linear-gradient(90deg, #e70a3a8f 28%, rgba(255,255,255,0) 48%, rgba(209, 11, 54, 0.564) 90%);
+    height: 60px;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
