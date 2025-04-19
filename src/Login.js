@@ -8,7 +8,7 @@ const Login = () => {
     email: "",
     senha: "",
   });
-  
+
   const navigate = useNavigate(); // Mova o useNavigate para o topo
 
   const handleChange = (e) => {
@@ -17,18 +17,18 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     const loginData = {
       email: formData.email,
       senha: formData.senha,
     };
 
     axios
-      .post("https://localhost:3000/api/login", loginData)
+      .post("http://localhost:8080/users/login", loginData)
       .then((response) => {
         if (response.data.success) {
           console.log("Login bem-sucedido!");
-          navigate("/conta"); // Redireciona para a página de conta
+          navigate("/conta");
         } else {
           console.log("Erro no login:", response.data.message);
         }
@@ -36,13 +36,15 @@ const Login = () => {
       .catch((error) => {
         console.error("Erro ao fazer login:", error);
       });
+
+
   };
 
   return (
     <div className="container my-5">
       <div className="form-container">
         <h1 className="text-center">Login</h1>
-        <form onSubmit={handleSubmit}>
+        <form action="/users/login" onSubmit={handleSubmit} method="POST">
           <div className="form-group mb-3">
             <label htmlFor="email">Email</label>
             <input
@@ -51,6 +53,7 @@ const Login = () => {
               id="email"
               name="email"
               placeholder="Digite seu email"
+              required
               onChange={handleChange}
               value={formData.email}
             />
@@ -63,6 +66,7 @@ const Login = () => {
               id="senha"
               name="senha"
               placeholder="Digite sua senha"
+              required
               onChange={handleChange}
               value={formData.senha}
             />
@@ -73,7 +77,7 @@ const Login = () => {
           <p className="text-center mt-3">
             Não tem uma conta? <a href="cadastro">Cadastre-se</a>
           </p>
-    
+
 
         </form>
       </div>

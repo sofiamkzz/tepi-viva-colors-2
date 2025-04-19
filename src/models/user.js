@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const bcrypt = require('bcrypt');
 
-const User = sequelize.define('User', {
+const Usuario = sequelize.define('Usuario', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -24,12 +24,12 @@ const User = sequelize.define('User', {
   numeroTelefone: {
     type: DataTypes.STRING,
   },
-  address: {
-    type: DataTypes.STRING,
-  },
   cep: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  logradouro: {
+    type: DataTypes.STRING,
   },
   cidade: {
     type: DataTypes.STRING,
@@ -60,11 +60,11 @@ const User = sequelize.define('User', {
 }, {
   hooks: {
     beforeCreate: async (user) => {
-      if (user.password) {
-        user.password = await bcrypt.hash(user.password, 10);
+      if (user.senha) {
+        user.senha = await bcrypt.hash(user.senha, 10);
       }
     }
   }
 });
 
-module.exports = User;
+module.exports = Usuario;

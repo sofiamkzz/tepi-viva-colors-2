@@ -1,5 +1,4 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config(); // Carrega variáveis do .env
 
 // Conexão com o banco de dados
 const sequelize = new Sequelize(
@@ -8,7 +7,8 @@ const sequelize = new Sequelize(
   process.env.DB_PASS,
   {
     host: process.env.DB_HOST,
-    dialect: 'mysql'
+    port: process.env.DB_PORT || 3306,
+    dialect: 'mysql',
   }
 );
 

@@ -7,6 +7,7 @@ const Cadastro = () => {
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
+    numeroTelefone: '',
     cep: '',
     endereco: '',
     cidade: '',
@@ -16,31 +17,97 @@ const Cadastro = () => {
     senha: ''
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // Função para formatar o CEP no padrão 00000-000
+  const formatarCep = (cep) => {
+    cep = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+    // Limita o CEP a 8 caracteres, pois CEP válido tem no máximo 8 dígitos
+    cep = cep.substring(0, 8);
+
+    // Aplica a máscara para o formato 00000-000
+    return cep.length <= 5
+      ? cep.replace(/(\d{5})(\d{0,3})/, '$1-$2')
+      : cep.replace(/(\d{5})(\d{3})/, '$1-$2');
   };
+
+  // Formata o telefone no padrão (99) 99999-9999 ou (99) 9999-9999
+  const formatarTelefone = (telefone) => {
+    telefone = telefone.replace(/\D/g, ''); // Remove tudo que não for número
+
+    if (telefone.length <= 10) {
+      return telefone.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+    } else {
+      return telefone.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === 'cep') {
+      const cepFormatado = formatarCep(value);
+      setFormData({ ...formData, [name]: cepFormatado });
+
+      if (cepFormatado.length === 9) {
+        buscarEnderecoPorCep(cepFormatado.replace('-', ''));
+      }
+    } else if (name === 'numeroTelefone') {
+      const telefoneFormatado = formatarTelefone(value);
+      setFormData({ ...formData, [name]: telefoneFormatado });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+
+  const buscarEnderecoPorCep = async (cep) => {
+    try {
+      // Faz a requisição para a API ViaCEP
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        alert('CEP inválido!');
+        return;
+      }
+
+      // Atualiza o estado com a cidade e o estado retornados
+      setFormData({
+        ...formData,
+        cidade: data.localidade,
+        estado: data.uf,
+        logradouro: data.logradouro,
+        bairro: data.bairro,
+      });
+    } catch (error) {
+      console.error('Erro ao buscar o endereço:', error);
+    }
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      // Verifique a URL correta do seu backend
-      const response = await fetch('http://localhost:3000/cadastro', {
+      const response = await fetch('http://localhost:8080/users/cadastro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData), // formData é o estado com os campos do form
+        body: JSON.stringify(formData),
       });
+
+      if (!response.ok) {
+        throw new Error('Erro ao cadastrar usuário');
+      }
 
       const data = await response.json();
       console.log('Cadastro realizado:', data);
-  
+
       // Redireciona após o cadastro
-      navigate('/login'); // Supondo que você queira redirecionar para a página de login
-  
+      navigate('/'); // Supondo que você queira redirecionar para a página de login
     } catch (error) {
       console.error('Erro no cadastro:', error);
+      alert(error);
     }
   };
 
@@ -58,57 +125,144 @@ const Cadastro = () => {
       <div className="container my-5" id="cadastro">
         <div className="form-container">
           <h1>Cadastro</h1>
-          <form onSubmit={handleSubmit} method="POST">
+          <form action="/users/cadastro" onSubmit={handleSubmit} method="POST">
             <div className="form-group mb-3">
               <label htmlFor="nome">Nome:</label>
-              <input type="text" className="form-control" id="nome" name="nome" required onChange={handleChange} />
+              <input 
+              type="text" 
+              className="form-control" 
+              id="nome" 
+              name="nome" 
+              required 
+              onChange={handleChange} 
+              value={formData.nome}
+              />
             </div>
 
             <div className="form-group mb-3">
-              <label htmlFor="email">Email</label>
-              <input type="email" className="form-control" id="email" name="email" required onChange={handleChange} />
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                className="form-control"
+                id="email"
+                name="email"
+                required
+                onChange={handleChange}
+                value={formData.email}
+              />
+            </div>
+
+            <div className="form-group mb-3">
+              <label htmlFor="numeroTelefone">Número de telefone:</label>
+              <input
+                type="text"
+                className="form-control"
+                id="numeroTelefone"
+                name="numeroTelefone"
+                required
+                onChange={handleChange}
+                value={formData.numeroTelefone}
+                maxLength="15" // Limita ao tamanho da máscara
+              />
+            </div>
+
+
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <label htmlFor="cep">CEP:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="cep"
+                  name="cep"
+                  required
+                  onChange={handleChange}
+                  value={formData.cep}
+                  maxLength="10" // Limita o CEP a 10 caracteres
+                />
+              </div>
+              <div className="col-md-6 mb-3">
+                <label htmlFor="logradouro">Logradouro:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="logradouro"
+                  name="logradouro"
+                  required
+                  onChange={handleChange}
+                  value={formData.logradouro}
+                />
+              </div>
             </div>
 
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label htmlFor="cep">CEP</label>
-                <input type="text" className="form-control" id="cep" name="cep" required onChange={handleChange} />
+                <label htmlFor="cidade">Cidade:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="cidade"
+                  name="cidade"
+                  required
+                  onChange={handleChange}
+                  value={formData.cidade}
+                />
               </div>
               <div className="col-md-6 mb-3">
-                <label htmlFor="endereco">Endereço</label>
-                <input type="text" className="form-control" id="endereco" name="endereco" required onChange={handleChange} />
+                <label htmlFor="estado">Estado:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="estado"
+                  name="estado"
+                  required
+                  onChange={handleChange}
+                  value={formData.estado}
+                />
               </div>
             </div>
 
             <div className="row">
               <div className="col-md-6 mb-3">
-                <label htmlFor="cidade">Cidade</label>
-                <input type="text" className="form-control" id="cidade" name="cidade" required onChange={handleChange} />
+                <label htmlFor="bairro">Bairro:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="bairro"
+                  name="bairro"
+                  required
+                  onChange={handleChange}
+                  value={formData.bairro}
+                />
               </div>
               <div className="col-md-6 mb-3">
-                <label htmlFor="estado">Estado</label>
-                <input type="text" className="form-control" id="estado" name="estado" required onChange={handleChange} />
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="col-md-6 mb-3">
-                <label htmlFor="bairro">Bairro</label>
-                <input type="text" className="form-control" id="bairro" name="bairro" required onChange={handleChange} />
-              </div>
-              <div className="col-md-6 mb-3">
-                <label htmlFor="complemento">Complemento</label>
-                <input type="text" className="form-control" id="complemento" name="complemento" onChange={handleChange} />
+                <label htmlFor="complemento">Complemento:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="complemento"
+                  name="complemento"
+                  onChange={handleChange}
+                  value={formData.complemento}
+                />
               </div>
             </div>
 
             <div className="form-group mb-3">
-              <label htmlFor="senha">Senha</label>
-              <input type="password" className="form-control" id="senha" name="senha" required onChange={handleChange} />
+              <label htmlFor="senha">Senha:</label>
+              <input
+                type="password"
+                className="form-control"
+                id="senha"
+                name="senha"
+                required
+                onChange={handleChange}
+                value={formData.senha}
+              />
             </div>
 
             <button type="submit" className="btn btn-main w-100">Cadastrar</button>
-            <p className="text-center mt-3">Já tem uma conta? <a href="/login">Faça login</a>.</p>
+            <p className="text-center mt-3">Já tem uma conta? <a href="/">Faça login</a>.</p>
           </form>
         </div>
       </div>
