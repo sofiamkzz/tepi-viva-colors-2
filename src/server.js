@@ -33,7 +33,7 @@ app.use('/users', userRoutes);;
 app.use('/carrinho', carrinhoRoutes);
 app.use('/auth', authRoutes);
 app.use('/favoritos', favoritosRoutes);
-app.use('/api/', produtosRoutes);
+app.use('/api', produtosRoutes);
 
 sequelize.authenticate()
   .then(() => {
@@ -44,7 +44,7 @@ sequelize.authenticate()
     process.exit(1);
   });
 
-sequelize.sync({ force: false })
+sequelize.sync({ alter: true })
   .then(() => {
     console.log('Banco sincronizado');
     app.listen(8080, () => {

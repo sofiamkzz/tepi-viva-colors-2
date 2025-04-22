@@ -65,7 +65,7 @@ const Conta = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/users/' + user.id, {
+            const response = await fetch('http://localhost:8080/admin/' + user.id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ const Conta = () => {
 
             <main className="container my-4">
                 <div className="text-center p-4" style={{ backgroundColor: '#f0dadf8f', borderRadius: 15 }}>
-                    <i className="fas fa-user-circle" style={{ fontSize: '3rem', color: '#d6336c' }}></i>
+                    <i className="fas fa-user-circle" style={{ fontSize: '3rem', color: '#d6336c' }}></i><br></br>
                     <h4>Dados Pessoais</h4>
                     <p>Nome: {user.nome}</p>
                     <p>Email: {user.email}</p>

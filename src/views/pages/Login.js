@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/login.css';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -84,7 +85,7 @@ const Login = () => {
           </button>
 
           <p className="text-center mt-3">
-            Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
+            Não tem uma conta? <Link to="/cadastro">Cadastre-se.</Link>
           </p>
         </form>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
+import '../css/admin.css';
 
 const Admin = () => {
   const [users, setUsers] = useState([]);
@@ -64,8 +65,8 @@ const Admin = () => {
   };
 
   const handleSaveChanges = async (e) => {
-    e.preventDefault();
-
+    e.preventDefault(); // Prevents the default form submission
+  
     const dadosAtualizados = {
       nome: formData.nome,
       email: formData.email,
@@ -77,27 +78,27 @@ const Admin = () => {
       bairro: formData.bairro,
       complemento: formData.complemento,
     };
-
+  
     if (formData.newPassword) {
       dadosAtualizados.senha = formData.newPassword;
     }
-
+  
     try {
       const response = await fetch(`http://localhost:8080/users/admin/${selectedUserId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dadosAtualizados)
       });
-
+  
       if (!response.ok) throw new Error('Erro ao atualizar usuário');
-
+  
       const userAtualizado = await response.json();
       setUsers(users.map(u => u.id === userAtualizado.id ? userAtualizado : u));
       setShowModal(false);
     } catch (error) {
       console.error('Erro ao salvar alterações:', error);
     }
-  };
+  };  
 
   return (
     <div>
@@ -113,7 +114,7 @@ const Admin = () => {
 
       {/* Header */}
       <header className="text-center">
-        <div className="container">
+        <div className="container"><br></br>
           <h1 className="admin-header-title">Admin - Gerenciar Usuários</h1>
           <p className="admin-header-description">Aqui você pode atualizar ou remover usuários</p>
         </div>
@@ -122,7 +123,7 @@ const Admin = () => {
       {/* Painel */}
       <main className="container my-5">
         <div className="user-info-panel">
-          <img src="admin-icon.png" alt="Admin Icon" className="admin-icon" />
+
           <h4>Administração de Conta</h4>
           <p>Gerencie os dados dos usuários de forma eficiente.</p>
         </div>
@@ -194,7 +195,7 @@ const Admin = () => {
               <Form.Label>Senha:</Form.Label>
               <Form.Control type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} placeholder="Nova senha" />
             </Form.Group>
-            <Button type="submit" style={{ backgroundColor: '#d6336c' }} onClick={() => handleSaveChanges()}>Salvar alterações</Button>
+            <Button type="submit" style={{ backgroundColor: '#d6336c' }} onClick={handleSaveChanges}>Salvar alterações</Button>
           </Form>
         </Modal.Body>
       </Modal>

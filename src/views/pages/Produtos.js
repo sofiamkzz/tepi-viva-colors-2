@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
+import '../css/produtos.css';
 
 export default function Produtos() {
     const [user, setUser] = useState(null);
@@ -140,7 +141,7 @@ export default function Produtos() {
                         produtos.map((produto, index) => (
                             <div className="col-md-4 col-lg-3 mb-4" key={index}>
                                 <div className="card shadow-sm">
-                                    <img src={produto.imagem} className="card-img-top" alt={produto.nome} />
+                                    <img src={produto.imagemUrl} className="card-img-top" alt={produto.nome} />
                                     <div className="card-body position-relative">
                                         <h5 className="card-title">{produto.nome}</h5>
                                         <p className="card-text">{produto.preco}</p>
