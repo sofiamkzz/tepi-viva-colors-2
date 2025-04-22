@@ -25,7 +25,7 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // <- ESSENCIAL para enviar e receber cookies
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 

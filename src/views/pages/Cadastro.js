@@ -16,21 +16,18 @@ const Cadastro = () => {
     senha: ''
   });
 
-  // Função para formatar o CEP no padrão 00000-000
   const formatarCep = (cep) => {
-    cep = cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+    cep = cep.replace(/\D/g, '');
 
-    // Limita o CEP a 8 caracteres, pois CEP válido tem no máximo 8 dígitos
     cep = cep.substring(0, 8);
 
-    // Aplica a máscara para o formato 00000-000
     return cep.length <= 5
       ? cep.replace(/(\d{5})(\d{0,3})/, '$1-$2')
       : cep.replace(/(\d{5})(\d{3})/, '$1-$2');
   };
 
   const formatarTelefone = (telefone) => {
-    telefone = telefone.replace(/\D/g, ''); 
+    telefone = telefone.replace(/\D/g, '');
 
     if (telefone.length <= 10) {
       return telefone.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
@@ -59,19 +56,16 @@ const Cadastro = () => {
 
   const buscarEnderecoPorCep = async (cep) => {
     try {
-      // Faz a requisição para a API ViaCEP
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
-  
+
       if (data.erro) {
         alert('CEP inválido!');
         return;
       }
-  
-      // Formata o CEP com hífen novamente
+
       const cepFormatado = formatarCep(cep);
-  
-      // Atualiza o estado com a cidade e o estado retornados, mantendo o CEP formatado
+
       setFormData({
         ...formData,
         cep: cepFormatado,
@@ -83,8 +77,7 @@ const Cadastro = () => {
     } catch (error) {
       console.error('Erro ao buscar o endereço:', error);
     }
-  };  
-
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -105,8 +98,7 @@ const Cadastro = () => {
       const data = await response.json();
       console.log('Cadastro realizado:', data);
 
-      // Redireciona após o cadastro
-      navigate('/'); // Supondo que você queira redirecionar para a página de login
+      navigate('/');
     } catch (error) {
       console.error('Erro no cadastro:', error);
       alert(error);
@@ -130,14 +122,14 @@ const Cadastro = () => {
           <form action="/users/cadastro" onSubmit={handleSubmit} method="POST">
             <div className="form-group mb-3">
               <label htmlFor="nome">Nome:</label>
-              <input 
-              type="text" 
-              className="form-control" 
-              id="nome" 
-              name="nome" 
-              required 
-              onChange={handleChange} 
-              value={formData.nome}
+              <input
+                type="text"
+                className="form-control"
+                id="nome"
+                name="nome"
+                required
+                onChange={handleChange}
+                value={formData.nome}
               />
             </div>
 
@@ -164,7 +156,7 @@ const Cadastro = () => {
                 required
                 onChange={handleChange}
                 value={formData.numeroTelefone}
-                maxLength="15" // Limita ao tamanho da máscara
+                maxLength="15"
               />
             </div>
 
@@ -180,7 +172,7 @@ const Cadastro = () => {
                   required
                   onChange={handleChange}
                   value={formData.cep}
-                  maxLength="10" // Limita o CEP a 10 caracteres
+                  maxLength="10"
                 />
               </div>
               <div className="col-md-6 mb-3">

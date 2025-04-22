@@ -4,7 +4,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 
 const Conta = () => {
     const [showModal, setShowModal] = useState(false);
-    const [user, setUser] = useState(null); // Dados do usuário
+    const [user, setUser] = useState(null);
     const [formData, setFormData] = useState({
         nome: '',
         email: '',
@@ -180,9 +180,9 @@ const Conta = () => {
                 </Modal>
             </main>
 
-            <footer className="bg-light py-4 mt-auto">
+            <footer className="bg-light-pink py-4">
                 <div className="container text-center">
-                    <p className="mb-0">&copy; 2024 Viva Colors. Todos os direitos reservados.</p>
+                    <p className="text-dark-pink mb-0">&copy; 2025 Viva Colors. Todos os direitos reservados.</p>
                 </div>
             </footer>
         </div>

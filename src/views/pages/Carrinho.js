@@ -1,33 +1,35 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Carrinho = () => {
   const [itens, setItens] = useState([]);
   const [total, setTotal] = useState(0);
   const [mensagem, setMensagem] = useState('');
+  const navigate = useNavigate(); 
 
-  // Carregar os itens do carrinho
   useEffect(() => {
     fetch('http://localhost:8080/carrinho', {
-      credentials: 'include', // importante para enviar o cookie da sessão!
+      credentials: 'include', 
     })
       .then(res => res.json())
       .then(data => {
         if (data.mensagem) setMensagem(data.mensagem);
-        setItens(data.cartItems || []);
-        setTotal(data.total || 0);
+        setItens(data.cartItems || []); 
+        setTotal(data.total || 0); 
       })
       .catch(err => {
         console.error('Erro ao buscar carrinho:', err);
         setMensagem('Erro ao carregar o carrinho.');
       });
-  }, []);
+  }, []); 
 
-  // Alterar a quantidade de um item
   const handleQuantidadeChange = async (id, quantidade) => {
-    const item = itens.find(item => item.id === id);
-    if (item) {
-      // Atualizar o estado local
-      setItens(itens.map(i => i.id === id ? { ...i, quantidade } : i));
+    const updatedItens = [...itens]; 
+    const itemIndex = updatedItens.findIndex(item => item.id === id); 
+
+    if (itemIndex !== -1) {
+      updatedItens[itemIndex].quantidade = quantidade; 
+      setItens(updatedItens);
 
       try {
         await fetch(`http://localhost:8080/carrinho/atualizar/${id}`, {
@@ -35,40 +37,65 @@ const Carrinho = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ quantidade }),
-          credentials: 'include',
+          body: JSON.stringify({ quantidade }), 
+          credentials: 'include', 
         });
 
-        // Atualizar o total após a modificação
-        const newTotal = itens.reduce((acc, item) => acc + (item.quantidade * item.produto.preco), 0);
+        const newTotal = updatedItens.reduce((acc, item) => acc + (item.quantidade * item.produto.preco), 0);
         setTotal(newTotal);
       } catch (err) {
         console.error('Erro ao atualizar a quantidade:', err);
-        setMensagem('Erro ao atualizar a quantidade.');
+        setMensagem('Erro ao atualizar a quantidade.'); 
       }
     }
   };
 
-  // Remover um item do carrinho
   const handleRemoverItem = async (id) => {
     try {
       await fetch(`http://localhost:8080/carrinho/remover/${id}`, {
         method: 'DELETE',
-        credentials: 'include',
+        credentials: 'include', 
       });
+
       setItens(itens.filter(item => item.id !== id));
+
+      const newTotal = itens.reduce((acc, item) => acc + (item.quantidade * item.produto.preco), 0);
+      setTotal(newTotal);
     } catch (err) {
       console.error('Erro ao remover item:', err);
       setMensagem('Erro ao remover item.');
     }
   };
 
+  const handleFinalizarCompra = () => {
+    navigate('/finalizarCompra');
+  };
+
   return (
     <div style={{ backgroundColor: '#fff4f9', fontFamily: "'Poppins', sans-serif", color: '#6a0572' }}>
-      {/* Navbar */}
-      {/* ... (mantém igual ao seu código atual) */}
 
-      {/* Carrinho */}
+      <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div className="container">
+          <div className="navbar-brand fw-bold">
+            <img src="papelaria.jpG" alt="Logo" style={{ height: '50px' }} />
+            Viva Colors
+          </div>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav ms-auto">
+              <li className="nav-item">
+                <Link className="nav-link" to="/carrinho">
+                  <i className="fas fa-shopping-cart"></i>
+                  <span className="badge">{itens.length}</span>
+                </Link>
+              </li>
+              <li className="nav-item"><Link className="nav-link" to="/">Início</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/favoritos">Favoritos</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/logout">Sair</Link></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
       <main className="container my-5">
         <h2 className="text-center mb-4">Seu Carrinho de Compras</h2>
         {mensagem && <p className="text-danger text-center">{mensagem}</p>}
@@ -109,7 +136,13 @@ const Carrinho = () => {
         </table>
         <div className="text-end">
           <h4>Total: R$ {parseFloat(total).toFixed(2)}</h4>
-          <a href="finalizarCompra" className="btn" style={{ background: 'linear-gradient(90deg, #d42249, #ffccf9)', border: 'none', color: 'white', padding: '10px 20px', fontWeight: 'bold', borderRadius: '30px' }}>Finalizar Compra</a>
+          <button
+            onClick={handleFinalizarCompra}
+            className="btn"
+            style={{ background: 'linear-gradient(90deg, #d42249, #ffccf9)', border: 'none', color: 'white', padding: '10px 20px', fontWeight: 'bold', borderRadius: '30px' }}
+          >
+            Finalizar Compra
+          </button>
         </div>
       </main>
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaHeart } from 'react-icons/fa';
 
-export default function Favoritos() {
+const Favoritos = () => {
   const produtosFavoritos = [
     {
       id: 1,
@@ -9,7 +9,6 @@ export default function Favoritos() {
       preco: "R$ 24,50",
       imagem: "https://images.tcdn.com.br/img/img_prod/1106500/caneta_gel_0_5mm_molin_flowers_18905_1_76afef01e147364b2e08014134ad0ef2.jpg"
     },
-    // outros produtos...
   ];
 
   const handleRemoveFavorite = async (productId) => {
@@ -26,7 +25,7 @@ export default function Favoritos() {
       }
 
       const data = await response.json();
-      alert(data.message); // Exibe a mensagem de sucesso
+      alert(data.message);
     } catch (error) {
       console.error('Erro ao remover favorito:', error);
       alert('Erro ao remover o produto dos favoritos');
@@ -50,10 +49,10 @@ export default function Favoritos() {
                 <p className="text-main">{produto.preco}</p>
                 <div className="d-flex justify-content-between align-items-center">
                   <a href="/carrinho" className="btn btn-main">Comprar</a>
-                  <FaHeart 
-                    className="remove-favorite" 
-                    title="Remover dos Favoritos" 
-                    onClick={() => handleRemoveFavorite(produto.id)} 
+                  <FaHeart
+                    className="remove-favorite"
+                    title="Remover dos Favoritos"
+                    onClick={() => handleRemoveFavorite(produto.id)}
                   />
                 </div>
               </div>
@@ -62,11 +61,13 @@ export default function Favoritos() {
         </div>
       </div>
 
-      <footer className="bg-light py-4 mt-5">
+      <footer className="bg-light-pink py-4">
         <div className="container text-center">
-          <p className="mb-0">&copy; 2024 Viva Colors. Todos os direitos reservados.</p>
+          <p className="text-dark-pink mb-0">&copy; 2025 Viva Colors. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
   );
 }
+
+export default Favoritos;

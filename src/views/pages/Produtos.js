@@ -7,22 +7,20 @@ export default function Produtos() {
     const [user, setUser] = useState(null);
     const [produtos, setProdutos] = useState([]);
     const [errorMsg, setErrorMsg] = useState(null);
-    const navigate = useNavigate();
 
-    // Função para buscar os dados do usuário
     const fetchUserData = async () => {
         try {
             const response = await fetch('http://localhost:8080/auth/me', {
                 method: 'GET',
-                credentials: 'include', // Isso envia o cookie de sessão com a requisição
+                credentials: 'include', 
             });
 
             const data = await response.json();
 
             if (data.success) {
-                setUser(data.user);  // Atualiza o estado com os dados do usuário
+                setUser(data.user);  
             } else {
-                setUser(null);  // Se não estiver logado, define o estado como null
+                setUser(null);
             }
         } catch (error) {
             console.error("Erro ao buscar dados do usuário:", error);
@@ -30,16 +28,15 @@ export default function Produtos() {
         }
     };
 
-    // Função para buscar os produtos do banco de dados
     const fetchProdutos = async () => {
         try {
             const response = await fetch('http://localhost:8080/api/produtos');
             const data = await response.json();
 
             if (data.success) {
-                setProdutos(data.produtos);  // Atualiza o estado com a lista de produtos
+                setProdutos(data.produtos);  
             } else {
-                setProdutos([]);  // Se não houver produtos, define o estado como array vazio
+                setProdutos([]);  
             }
         } catch (error) {
             console.error("Erro ao buscar produtos:", error);
@@ -48,10 +45,9 @@ export default function Produtos() {
     };
 
     useEffect(() => {
-        // Chama a função para verificar os dados do usuário e carregar os produtos ao montar o componente
         fetchUserData();
         fetchProdutos();
-    }, []); // Esse useEffect será chamado uma vez quando o componente for montado
+    }, []); 
 
     return (
         <>
@@ -92,7 +88,6 @@ export default function Produtos() {
                 </div>
             </nav>
 
-            {/* Carrossel com slides fixos */}
             <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
                 <div className="carousel-inner">
                     <div className="carousel-item active">
@@ -144,7 +139,7 @@ export default function Produtos() {
                                     <img src={produto.imagemUrl} className="card-img-top" alt={produto.nome} />
                                     <div className="card-body position-relative">
                                         <h5 className="card-title">{produto.nome}</h5>
-                                        <p className="card-text">{produto.preco}</p>
+                                        <p className="card-text">R$ {produto.preco}</p>
                                         <a href={`/carrinho/${produto.id}`} className="btn btn-main">Comprar</a>
                                     </div>
                                 </div>
@@ -156,7 +151,7 @@ export default function Produtos() {
 
             <footer className="bg-light-pink py-4">
                 <div className="container text-center">
-                    <p className="text-dark-pink mb-0">&copy; 2024 Viva Colors. Todos os direitos reservados.</p>
+                    <p className="text-dark-pink mb-0">&copy; 2025 Viva Colors. Todos os direitos reservados.</p>
                 </div>
             </footer>
         </>

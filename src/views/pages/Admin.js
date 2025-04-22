@@ -65,8 +65,8 @@ const Admin = () => {
   };
 
   const handleSaveChanges = async (e) => {
-    e.preventDefault(); // Prevents the default form submission
-  
+    e.preventDefault();
+
     const dadosAtualizados = {
       nome: formData.nome,
       email: formData.email,
@@ -78,31 +78,30 @@ const Admin = () => {
       bairro: formData.bairro,
       complemento: formData.complemento,
     };
-  
+
     if (formData.newPassword) {
       dadosAtualizados.senha = formData.newPassword;
     }
-  
+
     try {
       const response = await fetch(`http://localhost:8080/users/admin/${selectedUserId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dadosAtualizados)
       });
-  
+
       if (!response.ok) throw new Error('Erro ao atualizar usuário');
-  
+
       const userAtualizado = await response.json();
       setUsers(users.map(u => u.id === userAtualizado.id ? userAtualizado : u));
       setShowModal(false);
     } catch (error) {
       console.error('Erro ao salvar alterações:', error);
     }
-  };  
+  };
 
   return (
     <div>
-      {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-light" style={{ background: "#d42249" }}>
         <div className="container">
           <div className="navbar-brand fw-bold text-dark-pink">
@@ -112,7 +111,6 @@ const Admin = () => {
         </div>
       </nav>
 
-      {/* Header */}
       <header className="text-center">
         <div className="container"><br></br>
           <h1 className="admin-header-title">Admin - Gerenciar Usuários</h1>
@@ -120,7 +118,6 @@ const Admin = () => {
         </div>
       </header>
 
-      {/* Painel */}
       <main className="container my-5">
         <div className="user-info-panel">
 
@@ -128,7 +125,6 @@ const Admin = () => {
           <p>Gerencie os dados dos usuários de forma eficiente.</p>
         </div>
 
-        {/* Lista de Usuários */}
         <div className="user-list-panel">
           <h4>Usuários Registrados</h4>
           {users.map((user, index) => (
@@ -148,7 +144,6 @@ const Admin = () => {
         </div>
       </main>
 
-      {/* Modal de Edição */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Editar Dados Pessoais</Modal.Title>
@@ -200,10 +195,9 @@ const Admin = () => {
         </Modal.Body>
       </Modal>
 
-      {/* Rodapé */}
-      <footer className="bg-light py-4" style={{ background: "#d42249" }}>
+      <footer className="bg-light-pink py-4">
         <div className="container text-center">
-          <p className="mb-0">&copy; 2024 Viva Colors. Todos os direitos reservados.</p>
+          <p className="text-dark-pink mb-0">&copy; 2025 Viva Colors. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>

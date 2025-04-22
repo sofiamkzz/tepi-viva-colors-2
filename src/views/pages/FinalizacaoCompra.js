@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Finalizacao = () => {
-  // Estado para controlar o método de pagamento selecionado
   const [paymentMethod, setPaymentMethod] = useState('card');
 
   const handlePaymentMethodChange = (event) => {
@@ -17,7 +16,6 @@ const Finalizacao = () => {
 
   return (
     <div>
-      {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
           <div className="navbar-brand fw-bold text-dark-pink">
@@ -27,7 +25,6 @@ const Finalizacao = () => {
         </div>
       </nav>
 
-      {/* Header */}
       <header className="py-3 text-center">
         <div className="container">
           <h1 style={{ color: '#d42249', fontWeight: 'bold' }}>Finalização de Compra</h1>
@@ -35,7 +32,6 @@ const Finalizacao = () => {
         </div>
       </header>
 
-      {/* Formulário de Pagamento */}
       <main className="container my-5">
         <form>
           <div className="mb-4">
@@ -78,7 +74,6 @@ const Finalizacao = () => {
             </div>
           </div>
 
-          {/* Dados do Cartão de Crédito */}
           {paymentMethod === 'card' && (
             <div id="credit-card-payment" className="payment-option">
               <h4><i className="fas fa-credit-card"></i> Pagamento com Cartão de Crédito</h4>
@@ -103,7 +98,6 @@ const Finalizacao = () => {
             </div>
           )}
 
-          {/* Dados do Cartão de Débito */}
           {paymentMethod === 'debit' && (
             <div id="debit-card-payment" className="payment-option">
               <h4><i className="fas fa-credit-card"></i> Pagamento com Cartão de Débito</h4>
@@ -128,7 +122,6 @@ const Finalizacao = () => {
             </div>
           )}
 
-          {/* Pagamento com PIX */}
           {paymentMethod === 'pix' && (
             <div id="pix-payment" className="payment-option">
               <h4><i className="fas fa-qrcode"></i> Pagamento com PIX</h4>
@@ -152,10 +145,9 @@ const Finalizacao = () => {
         </form>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-light py-4">
+      <footer className="bg-light-pink py-4">
         <div className="container text-center">
-          <p className="mb-0">&copy; 2024 Viva Colors. Todos os direitos reservados.</p>
+          <p className="text-dark-pink mb-0">&copy; 2025 Viva Colors. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
