@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './login.css';
+import { useNavigate, Link } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,42 +8,49 @@ const Login = () => {
     senha: "",
   });
 
-  const navigate = useNavigate(); // Mova o useNavigate para o topo
+  const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const loginData = {
-      email: formData.email,
-      senha: formData.senha,
-    };
-
-    axios
-      .post("http://localhost:8080/users/login", loginData)
-      .then((response) => {
-        if (response.data.success) {
-          console.log("Login bem-sucedido!");
-          navigate("/conta");
-        } else {
-          console.log("Erro no login:", response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Erro ao fazer login:", error);
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // <- ESSENCIAL para enviar e receber cookies
+        body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
 
+      if (data.success) {
+        console.log("Login bem-sucedido!");
+        navigate("/conta");
+      } else {
+        console.log("Erro no login:", data.message);
+        setErrorMsg(data.message);
+      }
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+      setErrorMsg("Erro de conexão com o servidor.");
+    }
   };
 
   return (
     <div className="container my-5">
       <div className="form-container">
         <h1 className="text-center">Login</h1>
-        <form action="/users/login" onSubmit={handleSubmit} method="POST">
+
+        {errorMsg && <div className="alert alert-danger">{errorMsg}</div>}
+
+        <form onSubmit={handleSubmit}>
           <div className="form-group mb-3">
             <label htmlFor="email">Email</label>
             <input
@@ -58,6 +64,7 @@ const Login = () => {
               value={formData.email}
             />
           </div>
+
           <div className="form-group mb-3">
             <label htmlFor="senha">Senha</label>
             <input
@@ -71,14 +78,14 @@ const Login = () => {
               value={formData.senha}
             />
           </div>
+
           <button type="submit" className="btn btn-main btn-block">
             Entrar
           </button>
+
           <p className="text-center mt-3">
-            Não tem uma conta? <a href="cadastro">Cadastre-se</a>
+            Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
           </p>
-
-
         </form>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './cadastro.css';
 
 const Cadastro = () => {
   const navigate = useNavigate();
@@ -9,7 +8,7 @@ const Cadastro = () => {
     email: '',
     numeroTelefone: '',
     cep: '',
-    endereco: '',
+    logradouro: '',
     cidade: '',
     estado: '',
     bairro: '',
@@ -30,9 +29,8 @@ const Cadastro = () => {
       : cep.replace(/(\d{5})(\d{3})/, '$1-$2');
   };
 
-  // Formata o telefone no padrão (99) 99999-9999 ou (99) 9999-9999
   const formatarTelefone = (telefone) => {
-    telefone = telefone.replace(/\D/g, ''); // Remove tudo que não for número
+    telefone = telefone.replace(/\D/g, ''); 
 
     if (telefone.length <= 10) {
       return telefone.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
@@ -64,15 +62,19 @@ const Cadastro = () => {
       // Faz a requisição para a API ViaCEP
       const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
       const data = await response.json();
-
+  
       if (data.erro) {
         alert('CEP inválido!');
         return;
       }
-
-      // Atualiza o estado com a cidade e o estado retornados
+  
+      // Formata o CEP com hífen novamente
+      const cepFormatado = formatarCep(cep);
+  
+      // Atualiza o estado com a cidade e o estado retornados, mantendo o CEP formatado
       setFormData({
         ...formData,
+        cep: cepFormatado,
         cidade: data.localidade,
         estado: data.uf,
         logradouro: data.logradouro,
@@ -81,7 +83,7 @@ const Cadastro = () => {
     } catch (error) {
       console.error('Erro ao buscar o endereço:', error);
     }
-  };
+  };  
 
 
   const handleSubmit = async (e) => {

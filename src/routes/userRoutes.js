@@ -4,10 +4,9 @@ const userController = require('../controllers/userController');  // Verifique o
 
 // Rotas de usuários
 router.get('/admin', userController.getAllUsers);
-router.post('/login', userController.loginUser);
-router.post('/cadastro', userController.createUser);
 router.get('/:id', userController.getUserById);
-router.put('/:id', userController.updateUser);
+router.post('/cadastro', userController.createUser);
+router.put('/admin/:id', userController.updateUser);
 router.delete('/admin/:id', userController.deleteUser);
 
 module.exports = router;

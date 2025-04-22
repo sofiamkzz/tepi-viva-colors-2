@@ -1,5 +1,4 @@
-const Usuario = require('../models/user');
-const bcrypt = require('bcrypt');
+const Usuario = require('../models/usuario');
 
 // Função para retornar todos os usuários
 exports.getAllUsers = async (req, res) => {
@@ -13,9 +12,8 @@ exports.getAllUsers = async (req, res) => {
 
 // Função para criar um novo usuário
 exports.createUser = async (req, res) => {
-  console.log('DADOS RECEBIDOS DO FRONTEND:', req.body);
   try {
-    const { nome, email, senha, cep, endereco, cidade, estado, bairro, complemento, numeroTelefone } = req.body;
+    const { nome, email, senha, cep, logradouro, cidade, estado, bairro, complemento, numeroTelefone } = req.body;
 
     // Validação básica para garantir que os dados obrigatórios foram enviados
     if (!nome || !email || !senha) {
@@ -28,16 +26,13 @@ exports.createUser = async (req, res) => {
       return res.status(400).json({ error: 'Já existe um usuário com esse email.' });
     }
 
-    // Criptografando a senha
-    const hash = await bcrypt.hash(senha, 10);
-
     // Criando o novo usuário no banco de dados
     const novoUsuario = await Usuario.create({
       nome,
       email,
-      senha: hash,
+      senha,
       cep,
-      endereco,
+      logradouro,
       cidade,
       estado,
       bairro,
@@ -53,32 +48,6 @@ exports.createUser = async (req, res) => {
     res.status(500).json({ error: 'Erro ao criar usuário, veja o log para mais detalhes.' });
   }
 };
-
-exports.loginUser = async (req, res) => {
-  const { email, senha } = req.body;
-
-  try {
-    const user = await Usuario.findOne({ where: { email } });
-
-    if (!user) {
-      return res.status(401).json({ success: false, message: 'Usuário não encontrado' });
-    }
-
-    const senhaValida = await bcrypt.compare(senha, user.senha);
-
-    if (!senhaValida) {
-      return res.status(401).json({ success: false, message: 'Senha incorreta' });
-    }
-
-    // Se quiser, pode gerar um token aqui
-
-    return res.status(200).json({ success: true, message: 'Login bem-sucedido', user });
-  } catch (error) {
-    console.error('Erro no login:', error);
-    return res.status(500).json({ success: false, message: 'Erro ao fazer login' });
-  }
-};
-
 
 // Função para obter usuário por ID
 exports.getUserById = async (req, res) => {
